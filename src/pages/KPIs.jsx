@@ -45,9 +45,15 @@ function KPIs() {
     fetchAllKPIs();
   }, []);
 
+  // Cerrar formulario cuando cambia el tab
+  useEffect(() => {
+    setShowForm(false);
+  }, [activeTab]);
+
   const fetchPeriodos = async () => {
     try {
       const response = await api.get("/periodos/");
+      console.log("Periodos cargados:", response.data);
       setPeriodos(response.data);
     } catch (err) {
       console.error("Error fetching periodos:", err);
