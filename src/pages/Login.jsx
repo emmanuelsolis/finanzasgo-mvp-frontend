@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
@@ -10,6 +10,10 @@ function Login() {
   
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Mensaje de registro exitoso
+  const successMessage = location.state?.message;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,6 +37,12 @@ function Login() {
         <h2 className="text-2xl font-semibold mb-4 text-center">
           Iniciar sesión
         </h2>
+        
+        {successMessage && (
+          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+            {successMessage}
+          </div>
+        )}
         
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -77,6 +87,18 @@ function Login() {
             {loading ? "Iniciando sesión..." : "Entrar"}
           </button>
         </form>
+        
+        <div className="mt-6 text-center">
+          <p className="text-gray-600">
+            ¿No tienes cuenta?{' '}
+            <Link 
+              to="/register" 
+              className="text-slate-900 font-semibold hover:underline"
+            >
+              Regístrate aquí
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

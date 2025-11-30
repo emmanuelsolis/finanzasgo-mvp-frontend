@@ -20,17 +20,18 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // TODO: Ajustar el endpoint según tu API de FastAPI
-      // Formato común: { username: email, password: password }
       const response = await api.post("/auth/login", {
-        username: email,
+        email: email,
         password: password,
       });
 
-      const { access_token, user: userData } = response.data;
+      const { access_token } = response.data;
       
-      // Guardar token y usuario
+      // Guardar token
       localStorage.setItem("token", access_token);
+      
+      // Crear objeto de usuario básico con el email
+      const userData = { email };
       localStorage.setItem("user", JSON.stringify(userData));
       setUser(userData);
 
