@@ -4,6 +4,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Movimientos from "./pages/Movimientos.jsx";
+import KPIs from "./pages/KPIs.jsx";
 import Layout from "./components/Layout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
@@ -26,6 +27,7 @@ function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="movimientos" element={<Movimientos />} />
+          <Route path="kpis" element={<KPIs />} />
         </Route>
 
         {/* Cualquier ruta desconocida redirige al dashboard */}

@@ -28,6 +28,12 @@ function Layout() {
             >
               Movimientos
             </Link>
+            <Link
+              to="/kpis"
+              className="block hover:bg-slate-700 rounded px-3 py-2"
+            >
+              KPIs
+            </Link>
           </nav>
         </div>
 
