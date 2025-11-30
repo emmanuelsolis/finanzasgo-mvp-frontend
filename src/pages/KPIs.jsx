@@ -84,8 +84,8 @@ function KPIs() {
       
       // Convertir strings a números
       Object.keys(dataToSend).forEach(key => {
-        if (key !== 'periodo_id' && dataToSend[key]) {
-          dataToSend[key] = parseFloat(dataToSend[key]);
+        if (dataToSend[key]) {
+          dataToSend[key] = key === 'periodo_id' ? parseInt(dataToSend[key]) : parseFloat(dataToSend[key]);
         }
       });
 
