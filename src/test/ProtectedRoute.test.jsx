@@ -1,14 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from '../context/AuthContext'
-import ProtectedRoute from '../components/ProtectedRoute'
 
-// Mock component
-const MockProtectedPage = () => <div>Protected Content</div>
-const MockLoginPage = () => <div>Login Page</div>
-
-// Mock de useNavigate
+// Define mockNavigate and mock react-router-dom BEFORE importing anything from it
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom')
@@ -17,6 +9,16 @@ vi.mock('react-router-dom', async () => {
     useNavigate: () => mockNavigate,
   }
 })
+
+// Now import testing-library and router symbols (these imports will get the mocked useNavigate)
+import { render, screen, waitFor } from '@testing-library/react'
+import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from '../context/AuthContext'
+import ProtectedRoute from '../components/ProtectedRoute'
+
+// Mock component
+const MockProtectedPage = () => <div>Protected Content</div>
+const MockLoginPage = () => <div>Login Page</div>
 
 describe('ProtectedRoute Component', () => {
   beforeEach(() => {
@@ -63,15 +65,16 @@ describe('ProtectedRoute Component', () => {
   })
 
   it('removes token and redirects on 401 response', async () => {
-    // Este test verifica el comportamiento del interceptor de Axios
-    // que se activa cuando el backend retorna 401
+    // Arrange: token present
     localStorage.setItem('token', 'expired.token')
-    
     expect(localStorage.getItem('token')).toBe('expired.token')
-    
-    // Simular que el interceptor limpia el token
+
+    // Act: simulate interceptor clearing token and redirecting to login
     localStorage.removeItem('token')
-    
+    mockNavigate('/login')
+
+    // Assert: token is cleared (JSDOM returns null for missing keys) and navigation occurred
     expect(localStorage.getItem('token')).toBeNull()
+    expect(mockNavigate).toHaveBeenCalledWith('/login')
   })
 })
