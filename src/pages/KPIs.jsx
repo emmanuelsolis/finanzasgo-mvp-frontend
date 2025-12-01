@@ -19,22 +19,26 @@ function KPIs() {
       leads_generados: "",
       tasa_conversion: "",
       costo_adquisicion_cliente: "",
-      roi_marketing: ""
+      retorno_inversion_publicidad: "",
+      gasto_marketing: ""
     },
     ventas: {
       periodo_id: "",
       ingresos_totales: "",
       numero_ventas: "",
       ticket_promedio: "",
-      tasa_cierre: ""
+      tasa_cierre: "",
+      ciclo_ventas_dias: ""
     },
     finanzas: {
       periodo_id: "",
-      ingresos_totales: "",
-      costos_operativos: "",
-      utilidad_neta: "",
-      margen_neto: "",
-      flujo_caja: ""
+      ingresos: "",
+      gastos: "",
+      margen_contribucion: "",
+      ebitda: "",
+      roi: "",
+      burn_rate: "",
+      cash_runway_meses: ""
     }
   });
 
@@ -45,9 +49,15 @@ function KPIs() {
     fetchAllKPIs();
   }, []);
 
+  // Cerrar formulario cuando cambia el tab
+  useEffect(() => {
+    setShowForm(false);
+  }, [activeTab]);
+
   const fetchPeriodos = async () => {
     try {
       const response = await api.get("/periodos/");
+      console.log("Periodos cargados:", response.data);
       setPeriodos(response.data);
     } catch (err) {
       console.error("Error fetching periodos:", err);
@@ -104,10 +114,10 @@ function KPIs() {
     setFormData({
       ...formData,
       [activeTab]: activeTab === "marketing" 
-        ? { periodo_id: "", leads_generados: "", tasa_conversion: "", costo_adquisicion_cliente: "", roi_marketing: "" }
+        ? { periodo_id: "", leads_generados: "", tasa_conversion: "", costo_adquisicion_cliente: "", retorno_inversion_publicidad: "", gasto_marketing: "" }
         : activeTab === "ventas"
-        ? { periodo_id: "", ingresos_totales: "", numero_ventas: "", ticket_promedio: "", tasa_cierre: "" }
-        : { periodo_id: "", ingresos_totales: "", costos_operativos: "", utilidad_neta: "", margen_neto: "", flujo_caja: "" }
+        ? { periodo_id: "", ingresos_totales: "", numero_ventas: "", ticket_promedio: "", tasa_cierre: "", ciclo_ventas_dias: "" }
+        : { periodo_id: "", ingresos: "", gastos: "", margen_contribucion: "", ebitda: "", roi: "", burn_rate: "", cash_runway_meses: "" }
     });
   };
 
@@ -161,12 +171,23 @@ function KPIs() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">ROI Marketing (%) *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Retorno Inversión Publicidad ($) *</label>
               <input
                 type="number"
                 step="0.01"
-                value={formData.marketing.roi_marketing}
-                onChange={(e) => handleInputChange("roi_marketing", e.target.value)}
+                value={formData.marketing.retorno_inversion_publicidad}
+                onChange={(e) => handleInputChange("retorno_inversion_publicidad", e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Gasto Marketing ($) *</label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.marketing.gasto_marketing}
+                onChange={(e) => handleInputChange("gasto_marketing", e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 required
               />
@@ -219,62 +240,93 @@ function KPIs() {
                 required
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Ciclo de Ventas (días) *</label>
+              <input
+                type="number"
+                value={formData.ventas.ciclo_ventas_dias}
+                onChange={(e) => handleInputChange("ciclo_ventas_dias", e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                required
+              />
+            </div>
           </>
         );
       case "finanzas":
         return (
           <>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Ingresos Totales ($) *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Ingresos ($) *</label>
               <input
                 type="number"
                 step="0.01"
-                value={formData.finanzas.ingresos_totales}
-                onChange={(e) => handleInputChange("ingresos_totales", e.target.value)}
+                value={formData.finanzas.ingresos}
+                onChange={(e) => handleInputChange("ingresos", e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Costos Operativos ($) *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Gastos ($) *</label>
               <input
                 type="number"
                 step="0.01"
-                value={formData.finanzas.costos_operativos}
-                onChange={(e) => handleInputChange("costos_operativos", e.target.value)}
+                value={formData.finanzas.gastos}
+                onChange={(e) => handleInputChange("gastos", e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Utilidad Neta ($) *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Margen Contribución ($) *</label>
               <input
                 type="number"
                 step="0.01"
-                value={formData.finanzas.utilidad_neta}
-                onChange={(e) => handleInputChange("utilidad_neta", e.target.value)}
+                value={formData.finanzas.margen_contribucion}
+                onChange={(e) => handleInputChange("margen_contribucion", e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Margen Neto (%) *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">EBITDA ($) *</label>
               <input
                 type="number"
                 step="0.01"
-                value={formData.finanzas.margen_neto}
-                onChange={(e) => handleInputChange("margen_neto", e.target.value)}
+                value={formData.finanzas.ebitda}
+                onChange={(e) => handleInputChange("ebitda", e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Flujo de Caja ($) *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">ROI (%) *</label>
               <input
                 type="number"
                 step="0.01"
-                value={formData.finanzas.flujo_caja}
-                onChange={(e) => handleInputChange("flujo_caja", e.target.value)}
+                value={formData.finanzas.roi}
+                onChange={(e) => handleInputChange("roi", e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Burn Rate ($/mes) *</label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.finanzas.burn_rate}
+                onChange={(e) => handleInputChange("burn_rate", e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Cash Runway (meses) *</label>
+              <input
+                type="number"
+                value={formData.finanzas.cash_runway_meses}
+                onChange={(e) => handleInputChange("cash_runway_meses", e.target.value)}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                 required
               />
@@ -294,7 +346,8 @@ function KPIs() {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Leads</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Conversión %</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">CAC</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ROI %</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ROAS</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Gasto Mkt</th>
           </>
         );
       case "ventas":
@@ -304,16 +357,19 @@ function KPIs() {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">N° Ventas</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ticket Prom.</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cierre %</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ciclo (d)</th>
           </>
         );
       case "finanzas":
         return (
           <>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ingresos</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Costos</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Utilidad</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Margen %</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Flujo Caja</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Gastos</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mrg.Contrib</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">EBITDA</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ROI %</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Burn Rate</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Runway</th>
           </>
         );
       default:
@@ -329,7 +385,8 @@ function KPIs() {
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{kpi.leads_generados}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{kpi.tasa_conversion}%</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.costo_adquisicion_cliente}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{kpi.roi_marketing}%</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.retorno_inversion_publicidad?.toLocaleString()}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.gasto_marketing?.toLocaleString()}</td>
           </>
         );
       case "ventas":
@@ -339,16 +396,19 @@ function KPIs() {
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{kpi.numero_ventas}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.ticket_promedio}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{kpi.tasa_cierre}%</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{kpi.ciclo_ventas_dias}</td>
           </>
         );
       case "finanzas":
         return (
           <>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.ingresos_totales?.toLocaleString()}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.costos_operativos?.toLocaleString()}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.utilidad_neta?.toLocaleString()}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{kpi.margen_neto}%</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.flujo_caja?.toLocaleString()}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.ingresos?.toLocaleString()}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.gastos?.toLocaleString()}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.margen_contribucion?.toLocaleString()}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.ebitda?.toLocaleString()}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{kpi.roi}%</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${kpi.burn_rate?.toLocaleString()}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{kpi.cash_runway_meses}m</td>
           </>
         );
       default:

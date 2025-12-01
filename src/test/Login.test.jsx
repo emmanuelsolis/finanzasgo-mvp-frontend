@@ -1,19 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider } from '../context/AuthContext'
-import Login from '../pages/Login'
-import api from '../api/axiosClient'
 
-// Mock del API client
+// Mock del API client PRIMERO
 vi.mock('../api/axiosClient', () => ({
   default: {
     post: vi.fn(),
   }
 }))
 
-// Mock de useNavigate
+// Define mockNavigate and mock react-router-dom BEFORE importing anything from it
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom')
@@ -22,6 +16,14 @@ vi.mock('react-router-dom', async () => {
     useNavigate: () => mockNavigate,
   }
 })
+
+// Now import testing-library and other modules
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from '../context/AuthContext'
+import Login from '../pages/Login'
+import api from '../api/axiosClient'
 
 describe('Login Component', () => {
   beforeEach(() => {
