@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axiosClient';
-import theme from '../styles/theme';
 
 /**
  * Register Page Component
@@ -98,82 +97,33 @@ const Register = () => {
   };
 
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center px-4 py-12"
-      style={{ 
-        background: `linear-gradient(135deg, ${theme.colors.primary[50]} 0%, ${theme.colors.secondary[50]} 100%)` 
-      }}
-    >
-      <div 
-        className="w-full max-w-md bg-white transition-all duration-300 hover:shadow-2xl"
-        style={{
-          borderRadius: theme.borderRadius.xl,
-          boxShadow: theme.shadows.xl,
-          padding: '3rem'
-        }}
-      >
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div 
-            className="inline-flex items-center justify-center w-16 h-16 mb-4 transition-transform duration-300 hover:scale-110"
-            style={{
-              background: `linear-gradient(135deg, ${theme.colors.success[500]} 0%, ${theme.colors.primary[500]} 100%)`,
-              borderRadius: theme.borderRadius.full
-            }}
-          >
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-            </svg>
-          </div>
-          <h1 
-            className="font-bold mb-2"
-            style={{ 
-              fontSize: theme.typography.sizes['3xl'],
-              color: theme.colors.neutral[900],
-              fontFamily: theme.typography.fontFamily.sans
-            }}
-          >
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Crear Cuenta
           </h1>
-          <p style={{ color: theme.colors.neutral[600], fontSize: theme.typography.sizes.sm }}>
+          <p className="text-gray-600">
             Únete a FinanzasGo y gestiona tus finanzas
           </p>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div 
-            className="mb-6 p-4 transition-all duration-300"
-            style={{
-              backgroundColor: `${theme.colors.error[50]}`,
-              borderLeft: `4px solid ${theme.colors.error[500]}`,
-              borderRadius: theme.borderRadius.lg
-            }}
-          >
-            <p 
-              className="font-medium mb-1"
-              style={{ color: theme.colors.error[700], fontSize: theme.typography.sizes.sm }}
-            >
-              Error
-            </p>
-            <p style={{ color: theme.colors.error[600], fontSize: theme.typography.sizes.xs }}>
-              {error}
-            </p>
+          <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+            <p className="font-medium">Error</p>
+            <p className="text-sm">{error}</p>
           </div>
         )}
 
         {/* Registration Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Name Input */}
           <div>
             <label 
               htmlFor="name" 
-              className="block mb-2"
-              style={{ 
-                fontSize: theme.typography.sizes.sm,
-                fontWeight: theme.typography.fontWeight.medium,
-                color: theme.colors.neutral[700]
-              }}
+              className="block text-sm font-medium text-gray-700 mb-2"
             >
               Nombre Completo
             </label>
@@ -183,13 +133,7 @@ const Register = () => {
               type="text"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-3 border transition-all duration-200 focus:outline-none focus:ring-2"
-              style={{
-                borderColor: theme.colors.neutral[300],
-                borderRadius: theme.borderRadius.lg,
-                fontSize: theme.typography.sizes.base,
-                '--tw-ring-color': theme.colors.primary[500]
-              }}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
               placeholder="Juan Pérez"
               disabled={loading}
             />
@@ -199,12 +143,7 @@ const Register = () => {
           <div>
             <label 
               htmlFor="email" 
-              className="block mb-2"
-              style={{ 
-                fontSize: theme.typography.sizes.sm,
-                fontWeight: theme.typography.fontWeight.medium,
-                color: theme.colors.neutral[700]
-              }}
+              className="block text-sm font-medium text-gray-700 mb-2"
             >
               Correo Electrónico
             </label>
@@ -214,13 +153,7 @@ const Register = () => {
               type="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 border transition-all duration-200 focus:outline-none focus:ring-2"
-              style={{
-                borderColor: theme.colors.neutral[300],
-                borderRadius: theme.borderRadius.lg,
-                fontSize: theme.typography.sizes.base,
-                '--tw-ring-color': theme.colors.primary[500]
-              }}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
               placeholder="tu@email.com"
               disabled={loading}
             />
@@ -230,12 +163,7 @@ const Register = () => {
           <div>
             <label 
               htmlFor="password" 
-              className="block mb-2"
-              style={{ 
-                fontSize: theme.typography.sizes.sm,
-                fontWeight: theme.typography.fontWeight.medium,
-                color: theme.colors.neutral[700]
-              }}
+              className="block text-sm font-medium text-gray-700 mb-2"
             >
               Contraseña
             </label>
@@ -245,17 +173,11 @@ const Register = () => {
               type="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 border transition-all duration-200 focus:outline-none focus:ring-2"
-              style={{
-                borderColor: theme.colors.neutral[300],
-                borderRadius: theme.borderRadius.lg,
-                fontSize: theme.typography.sizes.base,
-                '--tw-ring-color': theme.colors.primary[500]
-              }}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
               placeholder="••••••••"
               disabled={loading}
             />
-            <p className="mt-1" style={{ fontSize: theme.typography.sizes.xs, color: theme.colors.neutral[500] }}>
+            <p className="mt-1 text-xs text-gray-500">
               Mínimo 6 caracteres
             </p>
           </div>
@@ -264,12 +186,7 @@ const Register = () => {
           <div>
             <label 
               htmlFor="confirmPassword" 
-              className="block mb-2"
-              style={{ 
-                fontSize: theme.typography.sizes.sm,
-                fontWeight: theme.typography.fontWeight.medium,
-                color: theme.colors.neutral[700]
-              }}
+              className="block text-sm font-medium text-gray-700 mb-2"
             >
               Confirmar Contraseña
             </label>
@@ -279,13 +196,7 @@ const Register = () => {
               type="password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full px-4 py-3 border transition-all duration-200 focus:outline-none focus:ring-2"
-              style={{
-                borderColor: theme.colors.neutral[300],
-                borderRadius: theme.borderRadius.lg,
-                fontSize: theme.typography.sizes.base,
-                '--tw-ring-color': theme.colors.primary[500]
-              }}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
               placeholder="••••••••"
               disabled={loading}
             />
@@ -295,38 +206,19 @@ const Register = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 text-white font-semibold transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-            style={{
-              background: loading 
-                ? theme.colors.neutral[400] 
-                : `linear-gradient(135deg, ${theme.colors.success[600]} 0%, ${theme.colors.primary[600]} 100%)`,
-              borderRadius: theme.borderRadius.lg,
-              fontSize: theme.typography.sizes.base,
-              boxShadow: loading ? 'none' : theme.shadows.md
-            }}
+            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors disabled:bg-indigo-400 disabled:cursor-not-allowed"
           >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Registrando...
-              </span>
-            ) : (
-              'Crear Cuenta'
-            )}
+            {loading ? 'Registrando...' : 'Crear Cuenta'}
           </button>
         </form>
 
         {/* Login Link */}
-        <div className="mt-8 text-center">
-          <p style={{ color: theme.colors.neutral[600], fontSize: theme.typography.sizes.sm }}>
+        <div className="mt-6 text-center">
+          <p className="text-gray-600">
             ¿Ya tienes cuenta?{' '}
             <Link 
               to="/login" 
-              className="font-semibold transition-colors duration-200 hover:underline"
-              style={{ color: theme.colors.primary[600] }}
+              className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors"
             >
               Inicia Sesión
             </Link>
